@@ -1,0 +1,40 @@
+<main class="page">
+  <h1>PromptLens</h1>
+  <p class="muted">Type an AI prompt. See how clear it is and what to add.</p>
+
+  <label for="prompt" class="muted">Your prompt</label>
+  <textarea
+    id="prompt"
+    spellcheck="false"
+    [value]="prompt()"
+    (input)="setPrompt($any($event.target).value)"></textarea>
+
+  <div class="buttons">
+    <button type="button" (click)="useStrong()">Try a strong prompt</button>
+    <button type="button" (click)="useWeak()">Try a weak prompt</button>
+  </div>
+
+  <section class="meter" aria-live="polite">
+    <div class="score">{{ result().score }}<small>/100</small></div>
+    <div class="grow">
+      <div class="label">{{ result().label }}</div>
+      <div class="rail">
+        <i [style.width.%]="result().score" [class.good]="result().score >= 80"></i>
+      </div>
+    </div>
+  </section>
+
+  <ul class="checks">
+    @for (c of result().checks; track c.key) {
+      <li [class.ok]="c.passed">
+        <span class="mark"></span>
+        <span>
+          <b>{{ c.key }}</b>
+          @if (!c.passed) {
+            <span class="tip">{{ c.tip }}</span>
+          }
+        </span>
+      </li>
+    }
+  </ul>
+</main>
